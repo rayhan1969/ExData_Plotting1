@@ -1,30 +1,40 @@
 #read in data file(set up working directory)
 setwd("C:/Users/ALIENWARE/Desktop/Ray/Plot")
-#formatted a certain way
-data <- read.table("household_power_consumption.txt", header=TRUE, sep=";", stringsAsFactors=FALSE, dec=".")
-#check that data is between 1/2/2007 and 2/2/2007
-#only want data between these dates
-subSetData <- data[data$Date %in% c("1/2/2007","2/2/2007") ,]
-#str(subSetData)
-#convert Date and Time variables to Date/Time classes
+#read in filename
+filename<-"household_power_consumption.txt"
+data <- read.table(filename, 
+header=TRUE, 
+sep=";", 
+colClasses=c(“character”,character”,
+rep(“numeric”,7)),
+na=”?”)
+
+# data must be  between 1/2/2007 and 2/2/2007
+
+checkData <- data[data$Date %in% c("1/2/2007","2/2/2007") ,]
+
+#Date and Time variables must be converted to Date/Time classes
 datetime <- strptime(paste(subSetData$Date, subSetData$Time, sep=" "), "%d/%m/%Y %H:%M:%S")
-#make sure things are numeric
-globalActivePower<-as.numeric(subSetData$Global_active_power)
-globalReactivePower <- as.numeric(subSetData$Global_reactive_power)
-voltage <- as.numeric(subSetData$Voltage)
-subMetering1 <- as.numeric(subSetData$Sub_metering_1)
-subMetering2 <- as.numeric(subSetData$Sub_metering_2)
-subMetering3 <- as.numeric(subSetData$Sub_metering_3)
-#plot dimensions
+#must be numeric
+globalActivePower<-as.numeric(checkData$Global_active_power)
+globalReactivePower <- as.numeric(checkData$Global_reactive_power)
+voltage <- as.numeric(checkData$Voltage)
+subMetering1 <- as.numeric(checkData$Sub_metering_1)
+subMetering2 <- as.numeric(checkData$Sub_metering_2)
+subMetering3 <- as.numeric(checkData$Sub_metering_3)
+#outline plot
 png("plot4.png", width=480, height=480)
 par(mfrow = c(2, 2))
-plot(datetime, globalActivePower, type="l", xlab="datetime", ylab="Global Active Power", cex=0.2)
+plot(datetime, globalActivePower, type="l", xlab="", ylab="Global Active Power")
 plot(datetime, voltage, type="l", xlab="datetime", ylab="Voltage")
-plot(datetime, subMetering1, type="l", ylab="Energy Submetering", xlab="datetime")
-lines(datetime, subMetering2, type="l", col="red")
-lines(datetime, subMetering3, type="l", col="blue")
-legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty=, lwd=2.5, col=c("black", "red", "blue"), bty="o")
+plot(datetime, subMetering1, type="l",col=”black”, ylab="Energy Submetering", xlab="")
+lines(datetime, subMetering2, col="red")
+lines(datetime, subMetering3, col="blue")
+legend("topright", 
+col=c("black", "red", "blue"),
+c(“Sub_metering_1”,”Sub_metering_2”,”Sub_metering_3”),lty=1,box.lwd=0)
 
-plot(datetime, globalReactivePower, type="l", xlab="datetime", ylab="Global_reactive_power")
+plot(datetime, globalReactivePower, type="n", xlab="datetime", ylab="Global_reactive_power")
+lines(datetime,globalReactivePower)
 
 dev.off()

@@ -2,12 +2,7 @@
 setwd("C:/Users/ALIENWARE/Desktop/Ray/Plot")
 #read in filename
 filename<-"household_power_consumption.txt"
-data <- read.table(filename, 
-header=TRUE, 
-sep=";", 
-colClasses=c(“character”,character”,
-rep(“numeric”,7)),
-na=”?”)
+data <- read.table(filename, header=TRUE, sep=";", colClasses=c(“character”,character”,rep(“numeric”,7)),na=”?”)
 
 # data must be  between 1/2/2007 and 2/2/2007
 
